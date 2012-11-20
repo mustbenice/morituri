@@ -1,0 +1,54 @@
+TODO:
+- .cue file:
+  - add version to morituri comment
+  - add DATE and CATALOG and PERFORMER and TITLE to top of cue
+  - add TITLE AND PERFORMER to each track
+- change format to be %2d - %performer by default
+- at least mention the data track somewhere in the log
+- check pregaps more than once, to see if results are consistent, or with
+  different methods
+- handle errors on cdrdao spawning (for example, not having cdrecorder,
+  or not putting the disk in)
+- check if it's simple to listen to each track in a multitrack completing
+- save trms to a pickle, after finishing each track
+- add a way to store configuration data per drive, like offset
+- rip the data session
+- add AccurateRip validation for ripped images to rip command
+- add GUI
+- persist RipResult so rips can be aborted and continued too; needs verification
+  of previously ripped files
+- write moovida plugin
+- cache results of MusicBrainz lookups
+- on ana, Goldfrapp tells me I have offset 0!
+- don't keep short HTOA's if their peak level is low
+  (see Pixies Planet of Sound single)
+- lossy encoding
+- consider basing ripping progress not only on read (reaches 100% before
+  writes are done) or writes (very bursty in cdparanoia) but a combo of the
+  two, each counting for half.
+- if disk not found in accuraterip, it doesn't mean that it's not accurate
+- discs we should rip:
+	LCD soundsystem disc 2 (data track)
+- check if cdda2wav or icedax analyze pregaps correctly
+- Zita Swoon anthology cd 1 shows track 8 rip NOT accurate, but checksums match
+- burn ripped images
+- use a temp dir, until the whole rip is good don't move it, so we easily find
+  half done rips
+- primal scream, track 5, it rips/checks/rips/checks/encodes/checks and then complains read and verify failed.  why did it encode ?
+- Musicbrainz disc id error:
+  Compare http://www.musicbrainz.org/cdtoc/MAj3xXf6QMy7G.BIFOyHyq4MySE-
+  with http://www.musicbrainz.org/cdtoc/USC1utCZbTLZy80aHvQzJw4FASk-
+  Almost same, but second is 2 seconds longer on last track, suggesting it
+  was calculated wrong (150 frame offset done wrong ?) Can't find it in
+  edit history though
+  Write an example document with this cd as an example explaining offsets
+  and id calculations
+- possibly figure out how to name albums with credited artist; look at gorky and spiritualized electric mainline
+- when shortening file name then reripping, it rerips since it doesn't know
+  the shortened name; see sufjan stevens
+- if a disc output dir is already there, see if it was properly finished;
+  complain if it was, to not overwrite
+- if multiple releases with different artist match the disc id, stop and
+  let user continue by choosing one
+- artist-credit-phrase fabricated by musicbrainzngs only looks at name, not at artist-credit->name (see e.g. Gorky)
+- getting cache results should depend on same drive/offset

@@ -1,0 +1,108 @@
+<Project
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns="http://usefulinc.com/ns/doap#"
+  xmlns:foaf="http://xmlns.com/foaf/0.1/"
+  xmlns:admin="http://webns.net/mvcb/">
+
+ <name>Morituri</name>
+ <shortname>morituri</shortname>
+ <homepage rdf:resource="http://thomas.apestaart.org/morituri/trac/" />
+ <created>2009-06-11</created>
+ <shortdesc xml:lang="en">
+Morituri is a CD ripper aiming for maximum quality.
+</shortdesc>
+ <description xml:lang="en">
+Morituri is a CD ripper aiming for maximum quality.
+ </description>
+ <category></category>
+ <wiki rdf:resource="http://thomas.apestaart.org/morituri/trac/" />
+ <bug-database rdf:resource="https://thomas.apestaart.org/morituri/trac/newticket" />
+ <screenshots></screenshots>
+<!--
+ <mailing-list rdf:resource="http://lists.sourceforge.net/lists/listinfo/morituri-devel/" />
+-->
+ <programming-language>python</programming-language>
+ <license rdf:resource="http://usefulinc.com/doap/licenses/gpl" />
+ <download-page rdf:resource="http://thomas.apestaart.org/projects/morituri/" />
+
+ <repository>
+   <SVNRepository>
+     <location rdf:resource="http://thomas.apestaart.org/morituri/svn/trunk/" />
+     <browse rdf:resource="http://thomas.apestaart.org/morituri/trac/browser/trunk" />
+   </SVNRepository>
+ </repository> 
+
+ <maintainer>
+  <foaf:Person>
+     <foaf:name>Thomas Vander Stichele</foaf:name>
+  </foaf:Person>
+ </maintainer>
+
+ <release>
+  <Version>
+   <revision>0.1.2</revision>
+   <branch>trunk</branch>
+   <name>VCR</name>
+   <created>2011-06-05</created>
+   <file-release rdf:resource="http://thomas.apestaart.org/download/morituri/morituri-0.1.2.tar.bz2" />
+   <file-release rdf:resource="http://thomas.apestaart.org/download/morituri/morituri-0.1.2-1.noarch.rpm" />
+   <dc:description>
+- UTF-8/unicode handling fixes
+- improved error handling
+- ignore tags for alac and wav
+- work around GStreamer flacparse bugs
+- change how paths get referenced in .cue files
+- properly interpret AccurateRip results; no more assertions on unexpected
+  ordering of results
+- add debug command
+    </dc:description>
+  </Version>
+ </release>
+
+ <release>
+  <Version>
+   <revision>0.1.1</revision>
+   <branch>trunk</branch>
+   <name>Dead</name>
+   <created>2010-04-16</created>
+   <file-release rdf:resource="http://thomas.apestaart.org/download/morituri/morituri-0.1.1.tar.bz2" />
+   <file-release rdf:resource="http://thomas.apestaart.org/download/morituri/morituri-0.1.1-1.noarch.rpm" />
+   <dc:description>
+- added 'rip image encode' command to encode an image to a lossy codec.
+- provided lossy codec profiles for vorbis, mp3, and mp3vbr
+- added a complete list of known drive offsets from AccurateRip
+- added a generated man page
+- better exception handling in tasks
+- tag audio files with musicbrainz id's
+- added 'rip image retag' command to retag audio files in an image
+- bug fixes
+    </dc:description>
+  </Version>
+ </release>
+
+ <release>
+  <Version>
+   <revision>0.1.0</revision>
+   <branch>trunk</branch>
+   <name>Youngblood</name>
+   <created>2009-09-26</created>
+   <file-release rdf:resource="http://thomas.apestaart.org/download/morituri/morituri-0.1.0.tar.bz2" />
+   <file-release rdf:resource="http://thomas.apestaart.org/download/morituri/morituri-0.1.0-1.noarch.rpm" />
+   <dc:description>
+- first release
+- support for MusicBrainz for metadata lookup
+- support for AccurateRip verification
+- detects sample read offset of drives
+- performs test and copy rip
+- detects and rips Hidden Track One Audio
+- templates for file and directory naming
+- support for lossless encoding only for now
+- tagging using GStreamer
+- for now, only a command line client (rip) is shipped
+    </dc:description>
+  </Version>
+ </release>
+
+</Project>
