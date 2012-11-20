@@ -38,37 +38,68 @@ class MorituriLogger(object):
 
         ### global
 
-        lines.append("Logfile created by: morituri %s" % configure.version)
+        lines.append("morituri version %s" % configure.version)
+        lines.append("")
         # FIXME: when we localize this, see #49 to handle unicode properly.
         import locale
         old = locale.getlocale(locale.LC_TIME)
         locale.setlocale(locale.LC_TIME, 'C')
         date = time.strftime("%b %d %H:%M:%S", time.localtime(epoch))
         locale.setlocale(locale.LC_TIME, old)
-        lines.append("Logfile created on: %s" % date)
+        lines.append("morituri logfile from %s" % date)
         lines.append("")
 
         # album
-        lines.append("Album: %s - %s" % (ripResult.artist, ripResult.title))
+        lines.append("%s / %s" % (ripResult.artist, ripResult.title))
         lines.append("")
 
         # drive
         lines.append(
-            "Drive: vendor %s, model %s" % (
-                ripResult.vendor, ripResult.model))
+            "Used Drive  : %s %s %s" % (
+                ripResult.vendor, ripResult.model, ripResult.release))
         lines.append("")
 
-        lines.append("Read offset correction: %d" %
-            ripResult.offset)
+        # Default for cdparanoia
+        lines.append("Use cdparanoia mode      : Yes (%s)" % (
+            ripResult.cdparanoia_version))
+
+        # Default for cdparanoia by virtue of ripping whole tracks at a time
+        lines.append("Defeat audio cache       : Yes")
+
+        # Default for cdparanoia by virtue of having no C2 rip mode
+        lines.append("Make use of C2 pointers  : No")
+
+        lines.append("")
+        lines.append("Read offset correction                      : %d" % (
+            ripResult.offset))
+
+        # Currently unsupported by cdparanoia
+        lines.append("Overread into Lead-In and Lead-Out          : No")
+
+        # Default for cdparanoia
+        lines.append("Fill up missing offset samples with silence : Yes")
+
+        # Default for cdparanoia
+        lines.append("Delete leading and trailing silent blocks   : No")
+
+        # Default
+        lines.append("Null samples used in CRC calculations       : Yes")
+
+        lines.append("Gap Detection                               : "
+            "cdrdao version %s" % ripResult.cdrdao_version)
+            
+        # Default for cdparanoia
+        lines.append("Gap handling                                : "
+            "Appended to previous track")
         lines.append("")
 
         # toc
-        lines.append("Table of Contents:")
+        lines.append("TOC of the extracted CD")
         lines.append("")
         lines.append(
-            "     Track |   Start           |  Length")
+            "     Track |   Start  |  Length  | Start sector | End sector")
         lines.append(
-            "     ------------------------------------------------")
+            "    ---------------------------------------------------------")
         table = ripResult.table
 
 
@@ -76,10 +107,12 @@ class MorituriLogger(object):
             start = t.getIndex(1).absolute
             length = table.getTrackLength(t.number)
             lines.append(
-            "       %2d  | %6d - %s | %6d - %s" % (
+            "       %2d  | %s | %s | %9d    | %8d" % (
                 t.number,
-                start, common.framesToMSF(start),
-                length, common.framesToMSF(length)))
+                common.framesToMSF(start),
+                common.framesToMSF(length),
+                start,
+                start + length - 1))
 
         lines.append("")
         lines.append("")
@@ -97,34 +130,44 @@ class MorituriLogger(object):
 
         lines.append('Track %2d' % trackResult.number)
         lines.append('')
-        lines.append('  Filename %s' % trackResult.filename)
+        lines.append('     Filename %s' % trackResult.filename)
         lines.append('')
         if trackResult.pregap:
-            lines.append('  Pre-gap: %s' % common.framesToMSF(
+            lines.append('     Pre-gap length %s' % common.framesToMSF(
                 trackResult.pregap))
             lines.append('')
 
-        lines.append('  Peak level %.1f %%' % (trackResult.peak * 100.0))
-        if trackResult.copycrc is not None:
-            lines.append('  Copy CRC %08X' % trackResult.copycrc)
-        if trackResult.testcrc is not None:
-            lines.append('  Test CRC %08X' % trackResult.testcrc)
-            if trackResult.testcrc == trackResult.copycrc:
-                lines.append('  Copy OK')
-            else:
-                lines.append("  WARNING: CRCs don't match!")
-        else:
-            lines.append("  WARNING: no CRC check done")
+        lines.append('     Peak level %.06f' % trackResult.peak)
+        if trackResult.testspeed:
+            lines.append('     Extraction Speed (Test) %.4f X' % (
+                trackResult.testspeed))
+        if trackResult.copyspeed:
+            lines.append('     Extraction Speed (Copy) %.4f X' % (
+                trackResult.copyspeed))
+        if trackResult.testcrc:
+            lines.append('     Test CRC %08X' % trackResult.testcrc)
+        if trackResult.copycrc:
+            lines.append('     Copy CRC %08X' % trackResult.copycrc)
+        if trackResult.ARCRC:
+            lines.append('     AccurateRip signature %08X' % trackResult.ARCRC)
 
         if trackResult.accurip:
-            lines.append('  Accurately ripped (confidence %d) [%08X]' % (
-                trackResult.ARDBConfidence, trackResult.ARCRC))
+            lines.append('     Accurately ripped (confidence %d)' % (
+                trackResult.ARDBConfidence))
         else:
             if trackResult.ARDBCRC:
-                lines.append('  Cannot be verified as accurate '
-                    '[%08X], AccurateRip returned [%08X]' % (
-                        trackResult.ARCRC, trackResult.ARDBCRC))
+                lines.append('     Cannot be verified as accurate, '
+                    'AccurateRip returned [%08X]' % (
+                        trackResult.ARDBCRC))
             else:
-                lines.append('  Track not present in AccurateRip database')
+                lines.append('     Track not present in AccurateRip database')
+
+        if trackResult.testcrc:
+            if trackResult.testcrc == trackResult.copycrc:
+                lines.append('     Copy OK')
+            else:
+                lines.append("     WARNING: CRCs don't match!")
+        else:
+            lines.append("     WARNING: no CRC check done")
 
         return lines
